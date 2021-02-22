@@ -32,6 +32,7 @@ int main(int argc, char * argv[])
         cout << "==> Attempted to open file: " << inputFileName << endl;
         cout << "==> Terminating program!!!" << endl;
         cout << "***********************************************" << endl << endl;
+        inputFile.close();
         return 1;
     }
 
@@ -44,6 +45,8 @@ int main(int argc, char * argv[])
         cout << "==> Attempted to open file: "<< outputFileName << endl;
         cout << "==> Terminating program!!!" << endl;
         cout << "***********************************************" << endl << endl;
+        inputFile.close();
+        outputFile.close();
         return 1;
     }
 
@@ -89,6 +92,8 @@ int main(int argc, char * argv[])
     cout << "==> All numbers should be positive" << endl;
     cout << "==> Terminating program!!!" << endl;
     cout << "***********************************************"  << endl << endl;
+    inputFile.close();
+    outputFile.close();
     return 1;
     }
 
@@ -110,5 +115,8 @@ int main(int argc, char * argv[])
     outputFile << "This average is:                   " << magnitude << endl;
     outputFile << "***********************************************" << endl;
 
+    // exit successfully
+    inputFile.close();
+    outputFile.close();
     return 0;
 }
