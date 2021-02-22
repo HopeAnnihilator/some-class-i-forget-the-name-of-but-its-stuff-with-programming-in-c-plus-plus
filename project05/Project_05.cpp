@@ -7,7 +7,7 @@ using namespace std;
 
 int main(int argc, char * argv[])
 {
-    // Check if proper amount of system arguments
+    // Check if proper amount of arguments
     if (argc != 3) {
         cout << "\n********* Command Line Argument Error *********" << endl;
         cout << "==> Incorrect number of Command Line Arguments!" << endl;
