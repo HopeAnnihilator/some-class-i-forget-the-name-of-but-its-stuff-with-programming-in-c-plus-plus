@@ -10,6 +10,8 @@ void bAdInPuT ();
 int cHoIcE ();
 void eXiT ();
 string fIlEnAmE (string openType);
+ifstream oPeNiNpUt (string filename);
+ofstream oPeNoUtPuT (string filename);
 bool iNpUtFiLe (ifstream& checkFile);
 bool oUtPuTfIlE (ofstream& checkFile);
 void fIlEoPeNeRrOr (string filename, string filetype);
@@ -25,50 +27,31 @@ int main () {
             eXiT ();
             return 0;
         }
-        else if (choice == 1) {
-            ifstream input;
+        else if (choice == 1 || choice == 2) {
             string inputFilename = fIlEnAmE ("input");
-            input.open(inputFilename.c_str());
+            ifstream input = oPeNiNpUt (inputFilename);
             bool inputFileOpen = iNpUtFiLe (ref(input));
             if (!inputFileOpen) {
                 fIlEoPeNeRrOr (inputFilename, "Input");
                 continue;
             }
 
-            ofstream output;
             string outputFilename = fIlEnAmE ("output");
-            output.open(outputFilename.c_str());
+            ofstream output = oPeNoUtPuT (outputFilename);
             bool outputFileOpen = oUtPuTfIlE (ref(output));
             if (!outputFileOpen) {
                 fIlEoPeNeRrOr (outputFilename, "Output");
                 continue;
             }
-
-            cOmPrEsStExT (ref(input), ref(output));
-            cLoSeSuCcEsSfUlLy (ref(input), ref(output), "Compressed");
-        }
-        else if (choice == 2) { 
-            ifstream input;
-            string inputFilename = fIlEnAmE ("input");
-            input.open(inputFilename.c_str());
-            bool inputFileOpen = iNpUtFiLe (ref(input));
-            if (!inputFileOpen) {
-                fIlEoPeNeRrOr (inputFilename, "Input");
-                continue;
+            if (choice == 1) {
+                cOmPrEsStExT (ref(input), ref(output));
+                cLoSeSuCcEsSfUlLy (ref(input), ref(output), "Compressed");
             }
-
-            ofstream output;
-            string outputFilename = fIlEnAmE ("output");
-            output.open(outputFilename.c_str());
-            bool outputFileOpen = oUtPuTfIlE (ref(output));
-            if (!outputFileOpen) {
-                fIlEoPeNeRrOr (outputFilename, "Output");
-                continue;    
+            else {
+                dEcOmPrEsStExT (ref(input), ref(output));
+                cLoSeSuCcEsSfUlLy (ref(input), ref(output), "Decompressed");
             }
-            dEcOmPrEsStExT (ref(input), ref(output));
-            cLoSeSuCcEsSfUlLy (ref(input), ref(output), "Decompressed"); 
         }
-
         else {
             bAdInPuT ();
         }
@@ -109,6 +92,18 @@ string fIlEnAmE (string openType) {
     cin >> filename;
     cout << filename << endl << endl;
     return filename;
+}
+
+ifstream oPeNiNpUt (string filename) {
+    ifstream input;
+    input.open(filename.c_str());
+    return input;
+}
+
+ofstream oPeNoUtPuT (string filename) {
+    ofstream output;
+    output.open(filename.c_str());
+    return output;
 }
 
 bool iNpUtFiLe (ifstream& checkFile) {
@@ -162,11 +157,17 @@ void cOmPrEsStExT (ifstream& input, ofstream& output) {
 void dEcOmPrEsStExT (ifstream& input, ofstream& output) {
     string line;
     getline(input, line, '*');
-    char current = line.at(0);
-
-    
-    cout << line << endl;
-    
+    string defNotAnInt;
+    for (int i = 0; i < line.length(); i++) {
+        char current = line.at(i);
+        if (isdigit(current)) {
+            defNotAnInt = defNotAnInt + current;
+        }
+        else {
+            output << string(stoi(defNotAnInt), current);
+            defNotAnInt = "";
+        }
+    }
 }
 
 
