@@ -16,7 +16,7 @@ void fIlEoPeNeRrOr (string filename, string filetype);
 void cOmPrEsStExT (ifstream& input, ofstream& output);
 void dEcOmPrEsStExT (ifstream& input, ofstream& output);
 void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType);
-void fAiLeD (ifstream& input, ofstream& output);
+void fAiLeD (ifstream& input, ofstream& output, string operatingType);
 
 int main () {
     // loop program
@@ -59,7 +59,11 @@ int main () {
             }
             else {
                 // if file empty fail
-                fAiLeD (input, output);
+                if (choice == 1) {
+                    fAiLeD (input, output, "Compression");
+                } else {
+                    fAiLeD (input, output, "Decompression");
+                }
             }
         }
     }
@@ -198,9 +202,9 @@ void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType) {
 }
 
 // fail successfully 
-void fAiLeD (ifstream& input, ofstream& output) {
+void fAiLeD (ifstream& input, ofstream& output, string operatingType) {
     cout << "*************** Empty Input File **************" << endl;
-    cout << "==> Empty file for Compression" << endl;
+    cout << "==> Empty file for " << operatingType << endl;
     cout << "==> Nothing written to the output file" << endl;
     cout << "***********************************************" << endl;
     input.close();
