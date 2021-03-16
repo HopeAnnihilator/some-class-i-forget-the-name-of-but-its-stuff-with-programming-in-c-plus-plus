@@ -5,6 +5,7 @@
 
 using namespace std;
 
+//Define functions
 void mEnU ();
 int cHoIcE ();
 void eXiT ();
@@ -18,14 +19,19 @@ void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType);
 void fAiLeD (ifstream& input, ofstream& output);
 
 int main () {
+    // loop program
     while (true) {
+        // print menu
         mEnU ();
+        // allow input
         int choice = cHoIcE ();
+        // check input
         if (choice == 0) {
             eXiT ();
             return 0;
         }
         else if (choice == 1 || choice == 2) {
+            // if input 1 or 2 open files
             string inputFilename = fIlEnAmE ("input");
             ifstream input;
             oPeNiNpUt (input, inputFilename);
@@ -41,6 +47,8 @@ int main () {
                 fIlEoPeNeRrOr (outputFilename, "Output");
                 continue;
             }
+
+            //operate according to integer entered
             if (choice == 1 && !(input.peek() == ifstream::traits_type::eof())) {
                 cOmPrEsStExT (input, output);
                 cLoSeSuCcEsSfUlLy (input, output, "Compressed");
@@ -50,6 +58,7 @@ int main () {
                 cLoSeSuCcEsSfUlLy (input, output, "Decompressed");
             }
             else {
+                // if file empty fail
                 fAiLeD (input, output);
             }
         }
@@ -57,6 +66,7 @@ int main () {
     return 0;
 }
 
+// print menu
 void mEnU () { 
     cout << endl << "**********  Compression Menu  **********" << endl;
     cout << "0. Exit Program" << endl;
@@ -64,8 +74,10 @@ void mEnU () {
     cout << "2. Uncompress File" << endl;
     cout << "****************************************" << endl << endl;
     cout << "Input your selection now: ";
+    return;
 }
 
+// allow input
 int cHoIcE () {
     while (true) {
         string item;
@@ -94,10 +106,13 @@ int cHoIcE () {
     }
 }
 
+// exit 
 void eXiT () {
     cout << "Quit selected.  Terminating program now..." << endl << endl;
+    return;
 }
 
+// input filename
 string fIlEnAmE (string openType) {
     string filename;
     cout << "Enter the name of the " << openType << " file: ";
@@ -106,16 +121,19 @@ string fIlEnAmE (string openType) {
     return filename;
 }
 
+// open file
 void oPeNiNpUt (ifstream& input, string filename) {
     input.open(filename.c_str());
     return;
 }
 
+// open file
 void oPeNoUtPuT (ofstream& output, string filename) {
     output.open(filename.c_str());
     return;
 }
 
+// output error on file fail
 void fIlEoPeNeRrOr (string filename, string filetype) {
     cout << "*************** File Open Error ***************" << endl;
     cout << "==> " << filetype << " file failed to open properly!!" << endl;
@@ -125,6 +143,7 @@ void fIlEoPeNeRrOr (string filename, string filetype) {
     return;
 }
 
+// compress input
 void cOmPrEsStExT (ifstream& input, ofstream& output) {
     string line;
     getline(input, line, '*');
@@ -150,6 +169,7 @@ void cOmPrEsStExT (ifstream& input, ofstream& output) {
     return;
 }
 
+// decompress input
 void dEcOmPrEsStExT (ifstream& input, ofstream& output) {
     string line;
     getline(input, line, '*');
@@ -164,9 +184,10 @@ void dEcOmPrEsStExT (ifstream& input, ofstream& output) {
             defNotAnInt = "";
         }
     }
+    return;
 }
 
-
+// exit successfully
 void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType) {
     cout << "==> File has been "<< closeType << endl;
     input.close();
@@ -176,6 +197,7 @@ void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType) {
     return;
 }
 
+// fail successfully 
 void fAiLeD (ifstream& input, ofstream& output) {
     cout << "*************** Empty Input File **************" << endl;
     cout << "==> Empty file for Compression" << endl;
