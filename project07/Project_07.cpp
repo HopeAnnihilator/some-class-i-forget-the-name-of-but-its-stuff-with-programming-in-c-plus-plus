@@ -58,7 +58,7 @@ int main () {
                 cLoSeSuCcEsSfUlLy (input, output, "Decompressed");
             }
             else {
-                // if file empty fail
+                // if file empty fail successfully
                 if (choice == 1) {
                     fAiLeD (input, output, "Compression");
                 } else {
@@ -83,30 +83,28 @@ void mEnU () {
 
 // allow input
 int cHoIcE () {
-    while (true) {
-        string item;
-        cin >> item;
-        int isInt;
-        if (isdigit(item.at(0)) || (item.at(0) == '-' && isdigit(item.at(1)))) {
-            isInt = stoi(item);
-            cout << isInt << endl << endl;
-            if (isInt == 0 || isInt == 1 || isInt == 2) {
-                return isInt;
-            } else {
-                cout << "************** Invalid Selection **************" << endl;
-                cout << "==> Invalid integer value entered" << endl;
-                cout << "==> Please enter 0, 1 or 2" << endl;
-                cout << "***********************************************" << endl;
-                return 99;
-            }
+    string item;
+    cin >> item;
+    int isInt;
+    if (isdigit(item.at(0)) || (item.at(0) == '-' && isdigit(item.at(1)))) {
+        isInt = stoi(item);
+        cout << isInt << endl << endl;
+        if (isInt == 0 || isInt == 1 || isInt == 2) {
+            return isInt;
         } else {
-            cout << item.at(0) << endl << endl;
             cout << "************** Invalid Selection **************" << endl;
-            cout << "==> Invalid character entered!!" << endl;
+            cout << "==> Invalid integer value entered" << endl;
             cout << "==> Please enter 0, 1 or 2" << endl;
             cout << "***********************************************" << endl;
             return 99;
         }
+    } else {
+        cout << item.at(0) << endl << endl;
+        cout << "************** Invalid Selection **************" << endl;
+        cout << "==> Invalid character entered!!" << endl;
+        cout << "==> Please enter 0, 1 or 2" << endl;
+        cout << "***********************************************" << endl;
+        return 99;
     }
 }
 
