@@ -6,18 +6,16 @@
 using namespace std;
 
 void mEnU ();
-void bAdInPuT ();
 int cHoIcE ();
 void eXiT ();
 string fIlEnAmE (string openType);
-ifstream oPeNiNpUt (string filename);
-ofstream oPeNoUtPuT (string filename);
-bool iNpUtFiLe (ifstream& checkFile);
-bool oUtPuTfIlE (ofstream& checkFile);
+void oPeNiNpUt (ifstream& input, string filename);
+void oPeNoUtPuT (ofstream& output, string filename);
 void fIlEoPeNeRrOr (string filename, string filetype);
 void cOmPrEsStExT (ifstream& input, ofstream& output);
 void dEcOmPrEsStExT (ifstream& input, ofstream& output);
 void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType);
+void fAiLeD (ifstream& input, ofstream& output);
 
 int main () {
     while (true) {
@@ -29,31 +27,31 @@ int main () {
         }
         else if (choice == 1 || choice == 2) {
             string inputFilename = fIlEnAmE ("input");
-            ifstream input = oPeNiNpUt (inputFilename);
-            bool inputFileOpen = iNpUtFiLe (ref(input));
-            if (!inputFileOpen) {
+            ifstream input;
+            oPeNiNpUt (input, inputFilename);
+            if (input.fail()) {
                 fIlEoPeNeRrOr (inputFilename, "Input");
                 continue;
             }
 
             string outputFilename = fIlEnAmE ("output");
-            ofstream output = oPeNoUtPuT (outputFilename);
-            bool outputFileOpen = oUtPuTfIlE (ref(output));
-            if (!outputFileOpen) {
+            ofstream output;
+            oPeNoUtPuT (output, outputFilename);
+            if (output.fail()) {
                 fIlEoPeNeRrOr (outputFilename, "Output");
                 continue;
             }
-            if (choice == 1) {
-                cOmPrEsStExT (ref(input), ref(output));
-                cLoSeSuCcEsSfUlLy (ref(input), ref(output), "Compressed");
+            if (choice == 1 && !(input.peek() == ifstream::traits_type::eof())) {
+                cOmPrEsStExT (input, output);
+                cLoSeSuCcEsSfUlLy (input, output, "Compressed");
+            }
+            else if (choice == 2 && !(input.peek() == ifstream::traits_type::eof())) {
+                dEcOmPrEsStExT (input, output);
+                cLoSeSuCcEsSfUlLy (input, output, "Decompressed");
             }
             else {
-                dEcOmPrEsStExT (ref(input), ref(output));
-                cLoSeSuCcEsSfUlLy (ref(input), ref(output), "Decompressed");
+                fAiLeD (input, output);
             }
-        }
-        else {
-            bAdInPuT ();
         }
     }
     return 0;
@@ -68,18 +66,32 @@ void mEnU () {
     cout << "Input your selection now: ";
 }
 
-void bAdInPuT () { 
-    cout << "************** Invalid Selection **************" << endl;
-    cout << "==> Invalid character entered!!" << endl;
-    cout << "==> Please enter 0, 1 or 2" << endl;
-    cout << "***********************************************" << endl;
-}
-
 int cHoIcE () {
-    int item;
-    cin >> item;
-    cout << item << endl << endl;
-    return item;
+    while (true) {
+        string item;
+        cin >> item;
+        int isInt;
+        if (isdigit(item.at(0)) || (item.at(0) == '-' && isdigit(item.at(1)))) {
+            isInt = stoi(item);
+            cout << isInt << endl << endl;
+            if (isInt == 0 || isInt == 1 || isInt == 2) {
+                return isInt;
+            } else {
+                cout << "************** Invalid Selection **************" << endl;
+                cout << "==> Invalid integer value entered" << endl;
+                cout << "==> Please enter 0, 1 or 2" << endl;
+                cout << "***********************************************" << endl;
+                return 99;
+            }
+        } else {
+            cout << item.at(0) << endl << endl;
+            cout << "************** Invalid Selection **************" << endl;
+            cout << "==> Invalid character entered!!" << endl;
+            cout << "==> Please enter 0, 1 or 2" << endl;
+            cout << "***********************************************" << endl;
+            return 99;
+        }
+    }
 }
 
 void eXiT () {
@@ -94,30 +106,14 @@ string fIlEnAmE (string openType) {
     return filename;
 }
 
-ifstream oPeNiNpUt (string filename) {
-    ifstream input;
+void oPeNiNpUt (ifstream& input, string filename) {
     input.open(filename.c_str());
-    return input;
+    return;
 }
 
-ofstream oPeNoUtPuT (string filename) {
-    ofstream output;
+void oPeNoUtPuT (ofstream& output, string filename) {
     output.open(filename.c_str());
-    return output;
-}
-
-bool iNpUtFiLe (ifstream& checkFile) {
-    if (checkFile.fail()) {
-        return false;
-    }
-    return true;
-}
-
-bool oUtPuTfIlE (ofstream& checkFile) {
-    if (checkFile.fail()) {
-        return false;
-    }
-    return true;
+    return;
 }
 
 void fIlEoPeNeRrOr (string filename, string filetype) {
@@ -173,6 +169,18 @@ void dEcOmPrEsStExT (ifstream& input, ofstream& output) {
 
 void cLoSeSuCcEsSfUlLy (ifstream& input, ofstream& output, string closeType) {
     cout << "==> File has been "<< closeType << endl;
+    input.close();
+    input.clear();
+    output.close();
+    output.clear();
+    return;
+}
+
+void fAiLeD (ifstream& input, ofstream& output) {
+    cout << "*************** Empty Input File **************" << endl;
+    cout << "==> Empty file for Compression" << endl;
+    cout << "==> Nothing written to the output file" << endl;
+    cout << "***********************************************" << endl;
     input.close();
     input.clear();
     output.close();
