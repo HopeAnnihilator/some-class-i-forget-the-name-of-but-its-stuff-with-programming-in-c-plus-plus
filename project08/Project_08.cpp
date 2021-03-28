@@ -15,7 +15,7 @@ struct subInfo {subscriberName name; Address address; renewal timeInfo;};
 //define functions
 void OPENINPUT (ifstream& input);
 void OPENOUTPUT (ofstream& output);
-void FILLFORM(ifstream& input, subInfo& data);
+bool FILLFORM(ifstream& input, subInfo& data);
 void PROCESSED (int subCount, int expiredCount);
 void EXPIRED(ofstream& output, subInfo& data);
 void EMPTYERROR (ofstream& output);
@@ -26,6 +26,7 @@ int main () {
     int subCount = 0;
     int expiredCount = 0;
     subInfo subData;
+    bool check;
 
     //open and test input file
     ifstream input;
@@ -37,19 +38,18 @@ int main () {
 
 
     while (true) {
-        //check if end of file
-        int c = input.peek();
-        if (c == EOF) {
+        //read data
+        check = FILLFORM (input, subData);
+        //if expired add to counter and write to output
+        if (check) { 
+            if (subData.timeInfo.timeLeft < 1) {
+                expiredCount ++;
+                EXPIRED (output, subData);
+            }
+            subCount ++;
+        } else {
             break;
         }
-        //if not end of file read data
-        FILLFORM (input, subData);
-        //if expired add to counter and write to output
-        if (subData.timeInfo.timeLeft < 1) {
-            expiredCount ++;
-            EXPIRED (output, subData);
-        }
-        subCount ++;
     }
     //if empty input throw error else exit successfully
     if (subCount == 0) {
@@ -107,8 +107,14 @@ void OPENOUTPUT (ofstream& output) {
     }
 };
 
-void FILLFORM(ifstream& input, subInfo& data) {
+bool FILLFORM(ifstream& input, subInfo& data) {
     string line;
+
+    //check if end of file
+    int c = input.peek();
+    if (c == EOF) {
+        return false;
+    }
 
     //read each line of data and convert to appropariate type
     getline(input, data.name.firstName, '\n');
@@ -128,6 +134,7 @@ void FILLFORM(ifstream& input, subInfo& data) {
     data.timeInfo.dateOBJ.day = stoi(line);
     getline(input, line, '\n');
     data.timeInfo.dateOBJ.year = stoi(line);
+    return true;
 }
 
 void PROCESSED (int subCount, int expiredCount) {
