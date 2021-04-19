@@ -24,18 +24,21 @@ using namespace std;
 
 // ************** CONTRUCTORS **************
 Date::Date () {
+    //set default date to epoch
     month = 1;
     day = 1;
     year = 1900;
 }
 
 Date::Date (int initMonth, int initDay, int initYear) {
+    //allow date input
     day = initDay;
     month = initMonth;
     year = initYear;
 }
 
 Date::Date(int initMonth, int initYear) {
+    //allow date input
     year = initYear;
     month = initMonth;
     day = 1;
@@ -43,6 +46,7 @@ Date::Date(int initMonth, int initYear) {
 
 // ************** TRANSFORMERS **************
 void Date::SetDate (int m, int d, int y) {
+    //allow date to be set
     month = m;
     day = d;
     year = y;
@@ -50,6 +54,7 @@ void Date::SetDate (int m, int d, int y) {
 }
 
 void Date::IncrementDate () {
+    //find days in given month
     int totalDays;
     switch (month) {
         case 1: totalDays = 31; break; 
@@ -66,20 +71,24 @@ void Date::IncrementDate () {
         case 12: totalDays = 31; break;
         default: break;
     }
+    //if current days in month >= total days in month increment month
     if (day >= totalDays) {
         month += 1;
         day = 0;
     }
+    //if month > 12 increment year
     if (month > 12) {
         year += 1;
         month = 1;
     }
+    //add day
     day += 1;
     return;
 }
 
 // ************** OBSERVERS *******************
 void Date::WriteNumberFormat () const {
+    //write in format month/day/year
     if (month < 10) {
         cout << '0';
     }
@@ -93,6 +102,7 @@ void Date::WriteNumberFormat () const {
 }
 
 void Date::WriteNameFormat () const {
+    //write in format month day, year
     switch (month) {
         case 1: cout << "January"; break;
         case 2: cout << "February"; break;
@@ -116,6 +126,7 @@ bool Date::SameDate(Date otherDate) const {
     return (day == otherDate.day && month == otherDate.month && year == otherDate.year);
 }
 bool Date::BeforeDate(Date otherDate) const {
+    //check if date1 before date2
     if (year < otherDate.year) {
         return true;
     } else if (year == otherDate.year && month < otherDate.month) {
@@ -127,6 +138,7 @@ bool Date::BeforeDate(Date otherDate) const {
     }
 }
 bool Date::AfterDate(Date otherDate) const {
+    //check if date1 after date2
     if (year > otherDate.year) {
         return true;
     } else if (year == otherDate.year && month > otherDate.month) {
